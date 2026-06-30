@@ -1660,23 +1660,45 @@ document.querySelectorAll('[data-r]').forEach(el => ro.observe(el));
   range.addEventListener('input', () => setPos(range.value));
   range.addEventListener('change', () => setPos(range.value));
 
-  // Sanfte Auto-Demo beim ersten Laden, damit Besucher den Effekt sofort verstehen
+  // Sanfte, flüssige Auto-Animation beim ersten Laden: fährt einmal
+  // von "Vorher" zu "Nachher", damit Besucher den Effekt sofort verstehen.
   let userInteracted = false;
-  let demoStep = 0;
-  const demoSeq = [52, 18, 84, 52];
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function animateSweep(from, to, duration) {
+    if (userInteracted) return;
+    const start = performance.now();
+
+    function frame(now) {
+      if (userInteracted) return;
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = easeInOutCubic(t);
+      const val = from + (to - from) * eased;
+      range.value = val;
+      setPos(val);
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
 
   function autoDemo() {
-    if (userInteracted || demoStep >= demoSeq.length) return;
-    range.value = demoSeq[demoStep];
-    setPos(demoSeq[demoStep]);
-    demoStep++;
-    setTimeout(autoDemo, 900);
+    if (userInteracted) return;
+    // Start bei "Vorher" (weit links), fährt mittellangsam zu "Nachher" (weit rechts)
+    setPos(8);
+    range.value = 8;
+    setTimeout(() => animateSweep(8, 92, 2200), 500);
   }
 
   // Demo erst starten, wenn der Hero sichtbar ist
   const heroObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (e.isIntersecting) { setTimeout(autoDemo, 1200); heroObs.disconnect(); }
+      if (e.isIntersecting) { setTimeout(autoDemo, 900); heroObs.disconnect(); }
     });
   }, { threshold: 0.3 });
   heroObs.observe(stage);
