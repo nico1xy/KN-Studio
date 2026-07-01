@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Datenschutzerklärung – KN-Studio</title>
+<meta name="robots" content="noindex"/>
+<link rel="stylesheet" href="../css/fonts.css"/>
+<link rel="stylesheet" href="legal.css" />
+<script>
+  (function () {
+    var saved = localStorage.getItem('kn-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script>
+<style>
+  :root { --accent:#6C63FF; --bg:#070910; --ink:#EEF0FF; --ink-dim:rgba(238,240,255,.62); --line:rgba(238,240,255,.1); --surf:#0C0E16; }
+  :root[data-theme="light"] { --bg:#F7F8FC; --ink:#11131C; --ink-dim:rgba(17,19,28,.62); --line:rgba(17,19,28,.1); --surf:#FFFFFF; --accent:#5B52E8; }
+  body { background: var(--bg); color: var(--ink); transition: background-color .35s, color .35s; }
+  .legal-page { background: var(--bg); }
+  h1, h2 { color: var(--ink) !important; }
+  p, a.legal-back { color: var(--ink-dim) !important; }
+  a { color: var(--accent) !important; }
+  .legal-note { border-top-color: var(--line) !important; color: var(--ink-dim) !important; }
+  .theme-btn {
+    position: fixed; top: 18px; right: 18px;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surf);
+    color: var(--ink); font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15); z-index: 999;
+    transition: background .3s, border-color .3s;
+  }
+  .theme-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+</style>
+</head>
+<body>
+<button class="theme-btn" id="legalTheme" aria-label="Hell/Dunkel umschalten" title="Hell/Dunkel umschalten">☀️</button>
+<script>
+  (function(){
+    var btn = document.getElementById('legalTheme');
+    function sync() {
+      var light = document.documentElement.getAttribute('data-theme') === 'light';
+      btn.textContent = light ? '🌙' : '☀️';
+    }
+    sync();
+    btn.addEventListener('click', function(){
+      var light = document.documentElement.getAttribute('data-theme') === 'light';
+      if (light) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('kn-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('kn-theme', 'light');
+      }
+      sync();
+    });
+  })();
+</script>
+
+<div class="legal-page">
+  <a href="/" class="legal-back">← Zurück zur Startseite</a>
+
+  <h1>Datenschutzerklärung</h1>
+
+  <!-- ============================================================
+       TODO: Diese Vorlage deckt die typischen Bausteine ab, die
+       diese Website verwendet (Kontaktformular, Cookies, Fonts).
+       Sobald echte Tools hinzukommen (z.B. Google Analytics,
+       Meta-Pixel, Newsletter-Tool), MUSS der jeweilige Abschnitt
+       ergänzt werden — sonst ist die Erklärung unvollständig und
+       abmahnfähig.
+
+       Empfehlung: anwaltliche Prüfung vor Live-Schaltung, oder
+       Generator wie z.B. von der IHK, Datenschutz-Generator.de,
+       e-recht24.de nutzen.
+       ============================================================ -->
+
+  <section>
+    <h2>1. Verantwortlicher</h2>
+    <p>
+      Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br/>
+      KN-Studio<br/>
+      [Anschrift]<br/>
+      E-Mail: [E-Mail-Adresse]
+    </p>
+  </section>
+
+  <section>
+    <h2>2. Hosting</h2>
+    <p>
+      Diese Website wird bei [Name des Hosting-Anbieters, z.B. IONOS, Hetzner,
+      Strato] gehostet. Der Anbieter verarbeitet in unserem Auftrag
+      personenbezogene Daten (z.B. Server-Logfiles) auf Grundlage eines
+      Auftragsverarbeitungsvertrags gemäß Art. 28 DSGVO.
+    </p>
+  </section>
+
+  <section>
+    <h2>3. Server-Logfiles</h2>
+    <p>
+      Beim Besuch dieser Website erhebt unser Hosting-Anbieter automatisch
+      Informationen, die Ihr Browser übermittelt (sog. Server-Logfiles).
+      Dazu gehören: Browsertyp, Betriebssystem, Referrer-URL, IP-Adresse,
+      Datum und Uhrzeit der Anfrage. Diese Daten dienen der technischen
+      Bereitstellung und Sicherheit der Website (Art. 6 Abs. 1 lit. f DSGVO)
+      und werden nicht mit anderen Datenquellen zusammengeführt.
+    </p>
+  </section>
+
+  <section>
+    <h2>4. Kontaktformular</h2>
+    <p>
+      Wenn Sie uns über das Kontaktformular Anfragen zukommen lassen, werden
+      Ihre Angaben aus dem Formular inklusive der von Ihnen dort angegebenen
+      Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von
+      Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne
+      Ihre Einwilligung weiter. Die Verarbeitung erfolgt auf Grundlage von
+      Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen).
+    </p>
+    <p>
+      <!-- TODO: anpassen, sobald ein echter Formular-Versanddienst
+           (z.B. Formspree, eigenes Backend) eingebunden ist -->
+      Die im Kontaktformular eingegebenen Daten verbleiben bei uns, bis Sie
+      uns zur Löschung auffordern, Ihre Einwilligung widerrufen oder der
+      Zweck für die Datenspeicherung entfällt.
+    </p>
+  </section>
+
+  <section>
+    <h2>5. Lokal eingebundene Schriftarten</h2>
+    <p>
+      Diese Website nutzt zur einheitlichen Darstellung von Schriftarten
+      sogenannte Web Fonts, die lokal auf unserem eigenen Server eingebunden
+      sind. Eine Verbindung zu Servern von Google oder anderen Drittanbietern
+      findet beim Aufruf dieser Seite dadurch nicht statt.
+    </p>
+  </section>
+
+  <section>
+    <h2>6. Cookies</h2>
+    <p>
+      <!-- TODO: anpassen je nachdem, ob/welche Cookies tatsächlich
+           gesetzt werden. Aktuell nutzt diese Seite:
+           - sessionStorage für den Passwortschutz (kein Cookie,
+             aber ähnlich zu behandeln, technisch erforderlich)
+           - localStorage für die Hell/Dunkel-Theme-Einstellung
+             (technisch erforderlich, kein Tracking)
+           Diese Speicherarten sind nach § 25 Abs. 2 TTDSG ohne
+           Einwilligung zulässig, da technisch notwendig.
+           Sobald Analyse- oder Marketing-Tools hinzukommen, ist
+           ein echtes Cookie-Consent-Tool mit Opt-in erforderlich! -->
+      Diese Website verwendet ausschließlich technisch notwendige
+      Speichertechnologien (Local Storage für Ihre Hell/Dunkel-Anzeigeeinstellung).
+      Diese sind nach § 25 Abs. 2 Nr. 2 TTDSG ohne gesonderte Einwilligung
+      zulässig, da sie für die Funktion der Website erforderlich sind.
+      Es werden keine Analyse-, Marketing- oder Tracking-Cookies eingesetzt.
+    </p>
+  </section>
+
+  <section>
+    <h2>7. Ihre Rechte</h2>
+    <p>
+      Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre
+      gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger
+      und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung,
+      Sperrung oder Löschung dieser Daten (Art. 15–20 DSGVO). Hierzu sowie
+      zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit
+      unter der im Impressum angegebenen Adresse an uns wenden.
+    </p>
+    <p>
+      Sie haben zudem das Recht, sich bei einer Datenschutz-Aufsichtsbehörde
+      über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren.
+    </p>
+  </section>
+
+  <p class="legal-note">
+    Stand: [Datum einsetzen] — vor Veröffentlichung bitte rechtlich prüfen lassen.
+  </p>
+</div>
+
+</body>
+</html>

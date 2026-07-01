@@ -1,0 +1,99 @@
+/* ============================================================
+   LOKALE SCHRIFTARTEN — DSGVO-konform
+   ============================================================
+   WARUM lokal statt Google Fonts CDN?
+   Beim Einbinden von Google Fonts per <link> (CDN) wird die
+   IP-Adresse jedes Besuchers an Google-Server übertragen, OHNE
+   dass eine Einwilligung eingeholt wurde. Das wurde in
+   Deutschland mehrfach abgemahnt (z.B. LG München I, Urteil
+   vom 20.01.2022, Az. 3 O 17493/20).
+
+   LÖSUNG: Schriftdateien selbst herunterladen und im Ordner
+   assets/fonts/ ablegen. Dann sind keine Drittanbieter-Anfragen
+   beim Seitenaufruf mehr nötig.
+
+   SO GEHT'S (einmalig, ca. 5 Minuten):
+   1. Gehe zu https://fonts.google.com/specimen/Space+Grotesk
+      und https://fonts.google.com/specimen/Inter
+   2. Klicke jeweils auf "Download family" (lädt eine ZIP-Datei)
+   3. Entpacke die .woff2-Dateien der benötigten Schnitte:
+      - Space Grotesk: Medium (500), SemiBold (600), Bold (700)
+      - Inter: Light (300), Regular (400), Medium (500),
+               SemiBold (600), Bold (700)
+   4. Lege die Dateien hier ab: assets/fonts/
+      (Dateinamen siehe @font-face-Regeln unten — bei Bedarf
+      anpassen, falls die heruntergeladenen Dateien anders heißen)
+
+   Alternative: Tools wie https://google-webfonts-helper.herokuapp.com/
+   erzeugen automatisch passende @font-face-Blöcke samt woff2-Dateien.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-v16-latin-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-v16-latin-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-v16-latin-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../assets/fonts/inter-v18-latin-300.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/inter-v18-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/inter-v18-latin-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/inter-v18-latin-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/inter-v18-latin-700.woff2') format('woff2');
+}
+
+/* ── Fallback-Stack ───────────────────────────────────────────
+   Falls die woff2-Dateien noch nicht abgelegt wurden, greift der
+   Browser automatisch auf diese System-Schriften zurück — die
+   Seite bricht also nicht, sieht aber bis zum Hinzufügen der
+   echten Dateien etwas anders aus. */

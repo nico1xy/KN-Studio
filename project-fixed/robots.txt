@@ -1,0 +1,8 @@
+# robots.txt für KN-Studio
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+Disallow: /legal/
+
+Sitemap: https://www.kn-studio.de/sitemap.xml

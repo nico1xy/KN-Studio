@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Impressum – KN-Studio</title>
+<meta name="robots" content="noindex"/>
+<link rel="stylesheet" href="../css/fonts.css"/>
+<link rel="stylesheet" href="legal.css" />
+<script>
+  (function () {
+    var saved = localStorage.getItem('kn-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script>
+<style>
+  :root { --accent:#6C63FF; --bg:#070910; --ink:#EEF0FF; --ink-dim:rgba(238,240,255,.62); --line:rgba(238,240,255,.1); --surf:#0C0E16; }
+  :root[data-theme="light"] { --bg:#F7F8FC; --ink:#11131C; --ink-dim:rgba(17,19,28,.62); --line:rgba(17,19,28,.1); --surf:#FFFFFF; --accent:#5B52E8; }
+  body { background: var(--bg); color: var(--ink); transition: background-color .35s, color .35s; }
+  .legal-page { background: var(--bg); }
+  h1, h2 { color: var(--ink) !important; }
+  p, a.legal-back { color: var(--ink-dim) !important; }
+  a { color: var(--accent) !important; }
+  .legal-note { border-top-color: var(--line) !important; color: var(--ink-dim) !important; }
+  .theme-btn {
+    position: fixed; top: 18px; right: 18px;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surf);
+    color: var(--ink); font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15); z-index: 999;
+    transition: background .3s, border-color .3s;
+  }
+  .theme-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+</style>
+</head>
+<body>
+<button class="theme-btn" id="legalTheme" aria-label="Hell/Dunkel umschalten" title="Hell/Dunkel umschalten">☀️</button>
+<script>
+  (function(){
+    var btn = document.getElementById('legalTheme');
+    function sync() {
+      var light = document.documentElement.getAttribute('data-theme') === 'light';
+      btn.textContent = light ? '🌙' : '☀️';
+    }
+    sync();
+    btn.addEventListener('click', function(){
+      var light = document.documentElement.getAttribute('data-theme') === 'light';
+      if (light) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('kn-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('kn-theme', 'light');
+      }
+      sync();
+    });
+  })();
+</script>
+
+<div class="legal-page">
+  <a href="/" class="legal-back">← Zurück zur Startseite</a>
+
+  <h1>Impressum</h1>
+
+  <!-- ============================================================
+       TODO: Echte Unternehmensdaten eintragen.
+       Pflichtangaben nach § 5 TMG / § 18 MStV.
+
+       Bei Personengesellschaften (GbR, OHG) oder Kapitalgesellschaften
+       (GmbH, UG) gelten zusätzliche Pflichtangaben (Handelsregister,
+       Registergericht, Vertretungsberechtigte, ggf. USt-IdNr.).
+
+       Im Zweifel: anwaltliche Prüfung oder Impressum-Generator nutzen,
+       z.B. von der IHK oder e-recht24.de.
+       ============================================================ -->
+
+  <section>
+    <h2>Angaben gemäß § 5 TMG</h2>
+    <p>
+      KN-Studio<br/>
+      [Vor- und Nachname / Firmierung]<br/>
+      [Straße und Hausnummer]<br/>
+      [PLZ und Ort]
+    </p>
+  </section>
+
+  <section>
+    <h2>Kontakt</h2>
+    <p>
+      Telefon: [Telefonnummer]<br/>
+      E-Mail: [E-Mail-Adresse]
+    </p>
+  </section>
+
+  <section>
+    <h2>Umsatzsteuer-ID</h2>
+    <p>
+      Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br/>
+      [USt-IdNr., falls vorhanden — sonst Abschnitt entfernen]
+    </p>
+  </section>
+
+  <section>
+    <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+    <p>
+      [Name, Anschrift wie oben]
+    </p>
+  </section>
+
+  <section>
+    <h2>EU-Streitschlichtung</h2>
+    <p>
+      Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS)
+      bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a><br/>
+      Unsere E-Mail-Adresse finden Sie oben im Impressum.
+    </p>
+  </section>
+
+  <section>
+    <h2>Verbraucherstreitbeilegung / Universalschlichtungsstelle</h2>
+    <p>
+      Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor
+      einer Verbraucherschlichtungsstelle teilzunehmen.
+    </p>
+  </section>
+
+  <p class="legal-note">
+    Quelle: Inspiriert von der Vorlage von e-recht24.de — vor Veröffentlichung
+    bitte rechtlich prüfen lassen.
+  </p>
+</div>
+
+</body>
+</html>

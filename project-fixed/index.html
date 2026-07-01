@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KN-Studio – Webdesign & IT, das performen lässt</title>
+<script>
+  /* Theme so früh wie möglich setzen, um Flackern beim Laden zu vermeiden.
+     Reihenfolge: gespeicherte Nutzerwahl > Systemeinstellung > hell (Standard). */
+  (function () {
+    var saved = localStorage.getItem('kn-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+</script>
+<meta name="description" content="KN-Studio: Wir bauen Websites, die Kunden gewinnen und Umsatz bringen. Webdesign für jede Branche – modern, schnell, messbar erfolgreich."/>
+<!-- TODO: echte Domain eintragen, sobald live -->
+<link rel="canonical" href="https://www.kn-studio.de/"/>
+<meta name="robots" content="index, follow"/>
+<meta name="theme-color" content="#070910"/>
+<!-- TODO: echtes Favicon ergänzen (favicon.ico, apple-touch-icon.png etc. im Root ablegen) -->
+<link rel="icon" href="assets/images/logo.png" type="image/png"/>
+<link rel="stylesheet" href="css/fonts.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+
+<!-- Strukturierte Daten für Google (LocalBusiness) — verbessert die
+     Darstellung in Suchergebnissen (z.B. Sterne, Öffnungszeiten).
+     TODO: Werte durch echte Unternehmensdaten ersetzen. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "KN-Studio",
+  "description": "IT-Dienstleister für Webdesign – moderne, schnelle Websites für jede Branche.",
+  "url": "https://www.kn-studio.de/",
+  "telephone": "+49-800-1234567",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Hannover",
+    "addressCountry": "DE"
+  },
+  "openingHours": "Mo-Fr 09:00-18:00",
+  "priceRange": "€€"
+}
+</script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     PASSWORD GATE
+     ▶ Passwort ändern: Zeile mit SITE_PASSWORD unten im <script>
+════════════════════════════════════════════════════ -->
+<div id="pwgate">
+  <div class="pw-box">
+
+    <!-- Logo -->
+    <div class="pw-logo">
+      <img class="pw-mark" src="assets/images/logo.png" alt="KN-Studio Logo" >
+      <div class="pw-name">KN-Studio</div>
+    </div>
+
+    <!-- Titel -->
+    <div class="pw-title">Vorschau-Zugang</div>
+    <div class="pw-sub">Diese Seite ist noch nicht öffentlich.<br>Bitte geben Sie das Passwort ein.</div>
+
+    <!-- Eingabefeld -->
+    <div class="pw-field-wrap">
+      <input
+        class="pw-input"
+        id="pwInput"
+        type="password"
+        placeholder="Passwort eingeben …"
+        autocomplete="current-password"
+        autofocus
+      />
+      <!-- Auge: Passwort anzeigen/verbergen -->
+      <button class="pw-eye" id="pwEye" onclick="togglePwVis()" aria-label="Passwort anzeigen">👁</button>
+    </div>
+
+    <!-- Fehlermeldung -->
+    <div class="pw-err" id="pwErr">Falsches Passwort – bitte erneut versuchen.</div>
+
+    <!-- Button -->
+    <button class="pw-btn" onclick="checkPw()">
+      <span>Einloggen →</span>
+    </button>
+
+    <!-- Hinweis -->
+    <div class="pw-hint">🔒 Geschützte Vorschau · KN-Studio 2026</div>
+
+  </div>
+</div>
+
+<!-- LOADER -->
+<div id="loader">
+  <img class="loader-img" src="assets/images/logo.png" alt="KN-Studio" >
+  <div class="loader-logo">
+    <span style="animation-delay:.05s">K</span>
+    <span style="animation-delay:.12s">N</span>
+    <span style="animation-delay:.19s">-</span>
+    <span style="animation-delay:.26s">S</span>
+    <span style="animation-delay:.33s">t</span>
+    <span style="animation-delay:.40s">u</span>
+    <span style="animation-delay:.47s">d</span>
+    <span style="animation-delay:.54s">i</span>
+    <span style="animation-delay:.61s">o</span>
+  </div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- CURSOR GLOW -->
+<div id="cur"></div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav id="nav">
+  <div class="ni">
+    <a href="#" class="nlogo">
+      <img class="nmark" src="assets/images/logo.png" alt="KN-Studio Logo" >
+      KN-Studio
+    </a>
+    <div class="nlinks" id="nlinks">
+      <a href="#mission">Über uns</a>
+      <a href="#services">Leistungen</a>
+      <a href="#portfolio">Projekte</a>
+      <a href="#testi">Bewertungen</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Kontakt</a>
+    </div>
+    <div class="ncta">
+      <a href="tel:+490001234567" class="btn btn-ghost btn-sm nghost">📞 Anrufen</a>
+      <a href="#contact" class="btn btn-v btn-sm"><span>Projekt&nbsp;anfragen</span></a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln" title="Hell/Dunkel umschalten">
+        <span class="theme-toggle-icon" id="themeIcon">🌙</span>
+      </button>
+    </div>
+    <button class="hbg" id="hbg" aria-label="Menü" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section id="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-noise"></div>
+  <div class="ct">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-pill">
+          <div class="pill-dot"></div>
+          IT-Dienstleister aus Hannover
+        </div>
+        <h1 class="ht">
+          Websites, die<br>
+          <span class="gr">wirklich</span><br>
+          performen.
+        </h1>
+        <p class="hero-sub">
+          Wir bauen digitale Auftritte, die Kunden gewinnen, Vertrauen schaffen und Umsatz bringen –
+          für jeden Betrieb, jede Branche, jeden Maßstab. Sehen Sie selbst, was möglich ist.
+        </p>
+        <div class="hero-acts">
+          <a href="#contact" class="btn btn-v"><span>Kostenloses Erstgespräch →</span></a>
+          <a href="#portfolio" class="btn btn-ghost">Projekte ansehen</a>
+        </div>
+        <div class="hero-metrics">
+          <div>
+            <div class="hm-val">80+</div>
+            <div class="hm-lab">Websites live</div>
+          </div>
+          <div>
+            <div class="hm-val">8 J.</div>
+            <div class="hm-lab">IT-Erfahrung</div>
+          </div>
+          <div>
+            <div class="hm-val">4,9 ★</div>
+            <div class="hm-lab">Kundenbewertung</div>
+          </div>
+          <div>
+            <div class="hm-val">100%</div>
+            <div class="hm-lab">Festpreisgarantie</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vorher/Nachher Slider — Signature Element -->
+      <div class="hero-mock">
+        <div class="ba-heading">So könnte Ihre Veränderung aussehen</div>
+        <div class="bwin">
+          <div class="bbar">
+            <div class="bdots"><span></span><span></span><span></span></div>
+            <div class="burl">
+              <span class="burl-lock">🔒</span>
+              kunde-vorher-nachher.de
+            </div>
+          </div>
+          <div class="ba-stage" id="baStage">
+            <div class="ba-frame ba-after">
+              <img src="assets/images/after.jpg" alt="Moderne, performante Website nach dem Relaunch durch KN-Studio">
+            </div>
+            <div class="ba-frame ba-before">
+              <img src="assets/images/before.jpg" alt="Alte, unübersichtliche Website vor dem Relaunch">
+            </div>
+            <div class="ba-label before">Vorher</div>
+            <div class="ba-label after">Nachher</div>
+            <div class="ba-handle" id="baHandle"></div>
+            <input type="range" class="ba-range" id="baRange" min="0" max="100" value="52" aria-label="Vorher/Nachher-Vergleich verschieben"/>
+            <div class="ba-spec">Ziehen, um den Unterschied zu sehen <strong>→</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TICKER ═══════ -->
+<div id="ticker">
+  <div class="ttrack">
+    <div class="titem">Arztpraxen</div>
+    <div class="titem">Handwerk</div>
+    <div class="titem">Restaurants</div>
+    <div class="titem">Friseure</div>
+    <div class="titem">Steuerberater</div>
+    <div class="titem">Kosmetik</div>
+    <div class="titem">Immobilien</div>
+    <div class="titem">Elektriker</div>
+    <div class="titem">Fitnessstudios</div>
+    <div class="titem">Dachdecker</div>
+    <div class="titem">Fotografen</div>
+    <div class="titem">Physiotherapie</div>
+    <div class="titem">Rechtsanwälte</div>
+    <div class="titem">Autowerkstatt</div>
+    <!-- Dupliziert für nahtloses Loopen -->
+    <div class="titem">Arztpraxen</div>
+    <div class="titem">Handwerk</div>
+    <div class="titem">Restaurants</div>
+    <div class="titem">Friseure</div>
+    <div class="titem">Steuerberater</div>
+    <div class="titem">Kosmetik</div>
+    <div class="titem">Immobilien</div>
+    <div class="titem">Elektriker</div>
+    <div class="titem">Fitnessstudios</div>
+    <div class="titem">Dachdecker</div>
+    <div class="titem">Fotografen</div>
+    <div class="titem">Physiotherapie</div>
+    <div class="titem">Rechtsanwälte</div>
+    <div class="titem">Autowerkstatt</div>
+  </div>
+</div>
+
+<!-- ═══════ MISSION ═══════ -->
+<section id="mission" class="sp">
+  <div class="ct">
+    <div class="mis-inner">
+      <div data-r>
+        <div class="ey">Unsere Mission</div>
+        <p class="mis-stmt">
+          Wir wollen, dass Ihre Website nicht nur <em>gut aussieht</em> –
+          sondern dass sie für Sie <em>arbeitet</em>, Kunden gewinnt
+          und Ihr Unternehmen <em>wachsen lässt.</em>
+        </p>
+        <p style="margin-top:24px;font-size:.97rem;color:var(--wdim);line-height:1.72;">
+          Viele Unternehmen haben noch keine Website – oder eine, die nicht funktioniert.
+          Wir ändern das. Mit klarer Strategie, modernem Design und technischer Expertise
+          bauen wir Auftritte, die messbar mehr Anfragen, mehr Anrufe, mehr Umsatz bringen.
+        </p>
+      </div>
+      <div class="mis-pts" data-r data-d="2">
+        <div class="mpt">
+          <div class="mpt-ico">🚀</div>
+          <div class="mpt-b">
+            <div class="mpt-t">Mehr Kunden durch Ihre Website</div>
+            <div class="mpt-d">Wir bauen keine reinen Visitenkarten – sondern digitale Verkäufer, die rund um die Uhr für Sie arbeiten.</div>
+          </div>
+        </div>
+        <div class="mpt">
+          <div class="mpt-ico">⚡</div>
+          <div class="mpt-b">
+            <div class="mpt-t">Schnell online, ohne Drama</div>
+            <div class="mpt-d">Klare Abläufe, fester Preis, kein Chaos. In 2–4 Wochen ist Ihre neue Website live – fertig, optimiert, einsatzbereit.</div>
+          </div>
+        </div>
+        <div class="mpt">
+          <div class="mpt-ico">🏆</div>
+          <div class="mpt-b">
+            <div class="mpt-t">Für jede Branche gemacht</div>
+            <div class="mpt-d">Ob Arztpraxis, Handwerk oder Kosmetikstudio – wir kennen die Anforderungen und bauen maßgeschneidert.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SERVICES ═══════ -->
+<section id="services" class="sp" style="padding-bottom:0">
+  <div class="ct sc-head" data-r>
+    <div class="ey">Leistungen</div>
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:700;letter-spacing:-.015em;color:var(--w);margin-bottom:12px">Was wir für Sie tun</h2>
+    <p style="font-size:1.02rem;color:var(--wdim);max-width:520px">Von der ersten Idee bis zur fertigen Website – alles aus einer Hand, ein Ansprechpartner.</p>
+  </div>
+  <div class="sv-scroll" id="svScroll">
+    <div class="sv-track">
+      <div class="svc">
+        <div class="svc-num">01</div>
+        <div class="svc-ico">🌐</div>
+        <div class="svc-t">Webdesign & Entwicklung</div>
+        <div class="svc-d">Moderne, schnelle Websites mit Wow-Effekt – responsiv auf allen Geräten, maßgeschneidert auf Ihre Branche.</div>
+        <div class="svc-tags"><span class="stag">HTML/CSS</span><span class="stag">Responsive</span><span class="stag">Performance</span></div>
+      </div>
+      <div class="svc">
+        <div class="svc-num">02</div>
+        <div class="svc-ico">📈</div>
+        <div class="svc-t">SEO & Sichtbarkeit</div>
+        <div class="svc-d">Damit Kunden Sie auf Google finden, bevor sie zur Konkurrenz gehen. Lokales SEO, Ladezeiten, technische Basis – alles dabei.</div>
+        <div class="svc-tags"><span class="stag">Google</span><span class="stag">Local SEO</span><span class="stag">Core Web Vitals</span></div>
+      </div>
+      <div class="svc">
+        <div class="svc-num">03</div>
+        <div class="svc-ico">📅</div>
+        <div class="svc-t">Online-Terminbuchung</div>
+        <div class="svc-d">Kunden buchen rund um die Uhr direkt auf Ihrer Website – ohne Telefon, ohne Zettel, ohne Aufwand für Sie.</div>
+        <div class="svc-tags"><span class="stag">Kalender</span><span class="stag">Automatisch</span><span class="stag">24/7</span></div>
+      </div>
+      <div class="svc">
+        <div class="svc-num">04</div>
+        <div class="svc-ico">🔒</div>
+        <div class="svc-t">DSGVO & Rechtssicherheit</div>
+        <div class="svc-d">Datenschutz, Impressum, SSL – alles korrekt eingerichtet. Kein Abmahnrisiko, kein Stress, keine Überraschungen.</div>
+        <div class="svc-tags"><span class="stag">DSGVO</span><span class="stag">SSL</span><span class="stag">Impressum</span></div>
+      </div>
+      <div class="svc">
+        <div class="svc-num">05</div>
+        <div class="svc-ico">🖼️</div>
+        <div class="svc-t">Branding & Design</div>
+        <div class="svc-d">Logo, Farben, Schriften – wir geben Ihrem Unternehmen ein professionelles Gesicht, das in Erinnerung bleibt.</div>
+        <div class="svc-tags"><span class="stag">Logo</span><span class="stag">CI</span><span class="stag">Farbwelt</span></div>
+      </div>
+      <div class="svc">
+        <div class="svc-num">06</div>
+        <div class="svc-ico">🛠️</div>
+        <div class="svc-t">Wartung & Support</div>
+        <div class="svc-d">Wir kümmern uns langfristig. Updates, Inhaltsänderungen, neue Seiten – Sie haben immer einen direkten Ansprechpartner.</div>
+        <div class="svc-tags"><span class="stag">Updates</span><span class="stag">Hosting</span><span class="stag">Support</span></div>
+      </div>
+      <div class="svc">
+        <div class="svc-num">07</div>
+        <div class="svc-ico">💬</div>
+        <div class="svc-t">WhatsApp & Chat-Integration</div>
+        <div class="svc-d">Direkter Draht zu Ihren Kunden. WhatsApp-Button, Kontaktformulare und Live-Chat – für mehr Anfragen ohne Hürden.</div>
+        <div class="svc-tags"><span class="stag">WhatsApp</span><span class="stag">Formular</span><span class="stag">Conversion</span></div>
+      </div>
+      <div class="svc">
+        <div class="svc-num">08</div>
+        <div class="svc-ico">📊</div>
+        <div class="svc-t">Analytics & Tracking</div>
+        <div class="svc-d">Wir zeigen Ihnen, wie viele Besucher kommen, woher sie kommen und was sie auf Ihrer Seite tun – datenschutzkonform.</div>
+        <div class="svc-tags"><span class="stag">Analytics</span><span class="stag">Berichte</span><span class="stag">DSGVO</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="sv-hint">← Scrollen für mehr Leistungen →</div>
+</section>
+
+<!-- ═══════ PROCESS ═══════ -->
+<section id="process" class="sp">
+  <div class="ct">
+    <div style="text-align:center;max-width:560px;margin:0 auto 56px" data-r>
+      <div class="ey">So läuft's ab</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-.015em;color:var(--w);margin-bottom:12px">Von der Anfrage zur fertigen Website</h2>
+      <p style="font-size:.97rem;color:var(--wdim)">Klar, schnell, ohne Überraschungen – in 4 Schritten zu Ihrem neuen Auftritt.</p>
+    </div>
+    <div class="proc-grid" data-r>
+      <div class="pstep">
+        <div class="pnum">1</div>
+        <div class="pico">💬</div>
+        <div class="pt">Erstgespräch</div>
+        <div class="pd">Sie erzählen uns von Ihrem Unternehmen – kostenlos, unverbindlich, 30 Minuten. Wir hören zu und finden heraus, was Ihre Website leisten soll.</div>
+      </div>
+      <div class="pstep">
+        <div class="pnum">2</div>
+        <div class="pico">🎨</div>
+        <div class="pt">Konzept & Design</div>
+        <div class="pd">Wir entwickeln ein Designkonzept speziell für Ihre Branche. Sie sehen erste Entwürfe, können Feedback geben – bis alles stimmt.</div>
+      </div>
+      <div class="pstep">
+        <div class="pnum">3</div>
+        <div class="pico">⚙️</div>
+        <div class="pt">Umsetzung & Test</div>
+        <div class="pd">Ihre Website wird gebaut, getestet und für alle Geräte optimiert. SEO-Basis, DSGVO, Geschwindigkeit – alles inklusive.</div>
+      </div>
+      <div class="pstep">
+        <div class="pnum">4</div>
+        <div class="pico">🚀</div>
+        <div class="pt">Launch & Betreuung</div>
+        <div class="pd">Ihre Website geht live. Wir bleiben als Partner – für Updates, Änderungen und alles, was danach kommt.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PORTFOLIO ═══════ -->
+<section id="portfolio" class="sp">
+  <div class="ct">
+    <div class="port-head" data-r>
+      <div>
+        <div class="ey">Referenzen</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-.015em;color:var(--w)">Websites, die wir gebaut haben</h2>
+      </div>
+      <a href="#contact" class="btn btn-ghost btn-sm">Alle ansehen →</a>
+    </div>
+    <div class="pgrid">
+      <div class="pitem" data-r data-d="1">
+        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80&auto=format&fit=crop" alt="Arztpraxis Website" loading="lazy"/>
+        <div class="pover"></div>
+        <div class="pinfo">
+          <div class="ptag">Arztpraxis · Hannover</div>
+          <div class="ptitle">Dr. med. Schmidt – Allgemeinmedizin</div>
+        </div>
+      </div>
+      <div class="pitem" data-r data-d="2">
+        <img src="https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=500&q=80&auto=format&fit=crop" alt="Restaurant Website" loading="lazy"/>
+        <div class="pover"></div>
+        <div class="pinfo">
+          <div class="ptag">Restaurant · Hannover</div>
+          <div class="ptitle">Trattoria Bella – Italiano</div>
+        </div>
+      </div>
+      <div class="pitem" data-r data-d="3">
+        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&q=80&auto=format&fit=crop" alt="Friseursalon Website" loading="lazy"/>
+        <div class="pover"></div>
+        <div class="pinfo">
+          <div class="ptag">Friseursalon · Linden</div>
+          <div class="ptitle">Studio Vivid – Haare & Beauty</div>
+        </div>
+      </div>
+      <div class="pitem" data-r data-d="1">
+        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&q=80&auto=format&fit=crop" alt="Handwerk Website" loading="lazy"/>
+        <div class="pover"></div>
+        <div class="pinfo">
+          <div class="ptag">Handwerksbetrieb · Region</div>
+          <div class="ptitle">RAUMWERK – Maler & Trockenbau</div>
+        </div>
+      </div>
+      <div class="pitem" data-r data-d="2">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80&auto=format&fit=crop" alt="Fitnessstudio Website" loading="lazy"/>
+        <div class="pover"></div>
+        <div class="pinfo">
+          <div class="ptag">Fitnessstudio · Mitte</div>
+          <div class="ptitle">PowerBase Gym</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         CASE STUDIES MIT KENNZAHLEN
+         TODO: Sobald echte Kundenprojekte vorliegen, hier
+         die Platzhalter-Werte (z. B. "+340%") durch reale,
+         belegbare Zahlen ersetzen. Bilder ebenfalls tauschen.
+         ════════════════════════════════════════════════ -->
+    <div class="case-grid" data-r>
+      <div class="case-card">
+        <div class="case-img">
+          <div class="case-img-tag">Handwerksbetrieb</div>
+          <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&q=80&auto=format&fit=crop" alt="RAUMWERK Website Relaunch" loading="lazy"/>
+        </div>
+        <div class="case-body">
+          <div class="case-title">RAUMWERK – Maler & Trockenbau</div>
+          <div class="case-metrics">
+            <div class="case-metric">
+              <div class="case-metric-val">+210%</div>
+              <div class="case-metric-lab">Mehr Anfragen / Monat</div>
+            </div>
+            <div class="case-metric">
+              <div class="case-metric-val">1,2s</div>
+              <div class="case-metric-lab">Ladezeit (vorher 6,8s)</div>
+            </div>
+          </div>
+          <a href="#contact" class="case-link">Case Study ansehen →</a>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-img">
+          <div class="case-img-tag">Arztpraxis</div>
+          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80&auto=format&fit=crop" alt="Arztpraxis Website Relaunch" loading="lazy"/>
+        </div>
+        <div class="case-body">
+          <div class="case-title">Praxis am Maschsee</div>
+          <div class="case-metrics">
+            <div class="case-metric">
+              <div class="case-metric-val">68%</div>
+              <div class="case-metric-lab">Termine jetzt online</div>
+            </div>
+            <div class="case-metric">
+              <div class="case-metric-val">-40%</div>
+              <div class="case-metric-lab">Telefonaufwand</div>
+            </div>
+          </div>
+          <a href="#contact" class="case-link">Case Study ansehen →</a>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-img">
+          <div class="case-img-tag">Restaurant</div>
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80&auto=format&fit=crop" alt="Restaurant Website Relaunch" loading="lazy"/>
+        </div>
+        <div class="case-body">
+          <div class="case-title">Trattoria Bella</div>
+          <div class="case-metrics">
+            <div class="case-metric">
+              <div class="case-metric-val">+85%</div>
+              <div class="case-metric-lab">Tischreservierungen</div>
+            </div>
+            <div class="case-metric">
+              <div class="case-metric-val">4,9★</div>
+              <div class="case-metric-lab">Google-Bewertung</div>
+            </div>
+          </div>
+          <a href="#contact" class="case-link">Case Study ansehen →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TESTIMONIALS ═══════ -->
+<section id="testi" class="sp">
+  <div class="ct">
+    <div style="text-align:center;max-width:560px;margin:0 auto 56px" data-r>
+      <div class="ey">Kundenstimmen</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-.015em;color:var(--w);margin-bottom:12px">Was unsere Kunden sagen</h2>
+      <p style="font-size:.97rem;color:var(--wdim)">Echte Erfahrungen – von Unternehmen, die jetzt online performen.</p>
+    </div>
+    <div class="tgrid">
+      <div class="tcard" data-r data-d="1">
+        <div class="tquote">"</div>
+        <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="ttxt">„Seit unsere neue Website live ist, haben sich die Anfragen verdreifacht. KN-Studio hat genau verstanden, was wir brauchen – und geliefert."</div>
+        <div class="tauth">
+          <div class="tav">MR</div>
+          <div>
+            <div class="tname">Markus R.</div>
+            <div class="trole">Malermeister · RAUMWERK Hannover</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard" data-r data-d="2">
+        <div class="tquote">"</div>
+        <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="ttxt">„Endlich eine Website, bei der ich stolz bin, meine Visitenkarte rauszugeben. Patienten buchen jetzt direkt online – das spart uns täglich Zeit."</div>
+        <div class="tauth">
+          <div class="tav">DS</div>
+          <div>
+            <div class="tname">Dr. Sandra K.</div>
+            <div class="trole">Hausärztin · Praxis am Maschsee</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard" data-r data-d="3">
+        <div class="tquote">"</div>
+        <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="ttxt">„Fester Preis, klare Kommunikation, schnelle Umsetzung. Unser Restaurant hat seit dem Launch deutlich mehr Tischreservierungen über die Website."</div>
+        <div class="tauth">
+          <div class="tav">AL</div>
+          <div>
+            <div class="tname">Antonio L.</div>
+            <div class="trole">Inhaber · Trattoria Bella Hannover</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FAQ ═══════ -->
+<section id="faq" class="sp">
+  <div class="ct">
+    <div style="text-align:center;max-width:560px;margin:0 auto 56px" data-r>
+      <div class="ey">FAQ</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-.015em;color:var(--w);margin-bottom:12px">Häufige Fragen</h2>
+      <p style="font-size:.97rem;color:var(--wdim)">Antworten auf die Fragen, die wir am häufigsten bekommen.</p>
+    </div>
+    <div class="fwrap" data-r>
+      <div class="fitem">
+        <button class="ftrig">Was kostet eine Website bei KN-Studio?<div class="fico">+</div></button>
+        <div class="fbody"><div class="fcont">Unsere Websites starten ab 799 € als Festpreis – ohne versteckte Kosten, ohne Überraschungen. Der genaue Preis hängt von Umfang und Funktionen ab. Im kostenlosen Erstgespräch bekommen Sie ein verbindliches Angebot.</div></div>
+      </div>
+      <div class="fitem">
+        <button class="ftrig">Wie lange dauert die Umsetzung?<div class="fico">+</div></button>
+        <div class="fbody"><div class="fcont">In der Regel 2–4 Wochen von Auftragserteilung bis Launch. Bei größeren Projekten planen wir gemeinsam einen realistischen Zeitrahmen und halten ihn auch ein.</div></div>
+      </div>
+      <div class="fitem">
+        <button class="ftrig">Muss ich technisches Wissen mitbringen?<div class="fico">+</div></button>
+        <div class="fbody"><div class="fcont">Überhaupt nicht. Wir kümmern uns um alles – von der Domain über das Hosting bis zur fertigen Website. Sie müssen nur Ihre Inhalte liefern und Feedback geben.</div></div>
+      </div>
+      <div class="fitem">
+        <button class="ftrig">Für welche Branchen bauen Sie Websites?<div class="fico">+</div></button>
+        <div class="fbody"><div class="fcont">Für praktisch alle kleinen und mittelständischen Unternehmen: Arztpraxen, Handwerk, Restaurants, Friseure, Steuerberater, Kosmetikstudios, Fitnessstudios, Dachdecker, Elektriker und viele mehr. Wir kennen die Anforderungen jeder Branche.</div></div>
+      </div>
+      <div class="fitem">
+        <button class="ftrig">Was passiert nach dem Launch?<div class="fico">+</div></button>
+        <div class="fbody"><div class="fcont">Wir bleiben als Partner. Auf Wunsch übernehmen wir Hosting, Wartung, Updates und Inhaltsänderungen – zu fairen Monatspauschalen ohne Vertragsfallen.</div></div>
+      </div>
+      <div class="fitem">
+        <button class="ftrig">Ich habe schon eine Website – können Sie die überarbeiten?<div class="fico">+</div></button>
+        <div class="fbody"><div class="fcont">Ja. Wir schauen uns Ihre bestehende Website an und sagen Ihnen ehrlich, ob eine Überarbeitung oder ein Neustart die bessere Lösung ist. Manchmal reicht ein Facelift, manchmal braucht es einen kompletten Neuaufbau.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CONTACT ═══════ -->
+<section id="contact" class="sp">
+  <div class="ct">
+    <div class="cgrid">
+      <div data-r>
+        <div class="ey">Kontakt</div>
+        <h2 class="ci-t">Ihr Projekt<br><span>beginnt hier.</span></h2>
+        <p class="ci-s">Erstgespräch kostenlos, unverbindlich und ohne Kleingedrucktes. Wir melden uns innerhalb von 24 Stunden.</p>
+        <div class="cdet">
+          <div class="cico">📞</div>
+          <div>
+            <div class="clab">Telefon</div>
+            <a href="tel:+490001234567" class="cval">0800 / 123 456 7</a>
+          </div>
+        </div>
+        <div class="cdet">
+          <div class="cico">✉️</div>
+          <div>
+            <div class="clab">E-Mail</div>
+            <a href="mailto:info@kn-studio.de" class="cval">info@kn-studio.de</a>
+          </div>
+        </div>
+        <div class="cdet">
+          <div class="cico">📍</div>
+          <div>
+            <div class="clab">Standort</div>
+            <div class="cval" style="font-weight:400;font-size:.9rem;color:var(--wdim)">Hannover & Umgebung<br>Remote-Projekte deutschlandweit</div>
+          </div>
+        </div>
+        <div class="cdet">
+          <div class="cico">🕐</div>
+          <div>
+            <div class="clab">Erreichbarkeit</div>
+            <div class="cval" style="font-weight:400;font-size:.88rem;line-height:1.8;color:var(--wdim)">Mo – Fr: 9:00 – 18:00 Uhr<br>Erstgespräche auch abends nach Vereinbarung</div>
+          </div>
+        </div>
+      </div>
+      <div class="cform" data-r data-d="2">
+        <div class="cf-t">Projekt anfragen</div>
+        <div class="cf-s">Kostenloses Erstgespräch – wir antworten innerhalb von 24 Stunden.</div>
+        <div class="frow">
+          <div class="fg">
+            <label>Vorname *</label>
+            <input type="text" id="vorname" placeholder="Max" required/>
+          </div>
+          <div class="fg">
+            <label>Nachname *</label>
+            <input type="text" id="nachname" placeholder="Mustermann" required/>
+          </div>
+        </div>
+        <div class="fg">
+          <label>E-Mail *</label>
+          <input type="email" id="email" placeholder="max@mein-betrieb.de" required/>
+        </div>
+        <div class="fg">
+          <label>Telefon</label>
+          <input type="tel" id="telefon" placeholder="+49 511 ..."/>
+        </div>
+        <div class="fg">
+          <label>Branche / Art des Projekts *</label>
+          <select id="branche" required>
+            <option value="">Bitte auswählen...</option>
+            <option>Arztpraxis / Gesundheit</option>
+            <option>Handwerksbetrieb</option>
+            <option>Restaurant / Café</option>
+            <option>Friseur / Kosmetik</option>
+            <option>Steuerberater / Rechtsanwalt</option>
+            <option>Fitnessstudio / Sport</option>
+            <option>Immobilien</option>
+            <option>Fotografie / Kreativ</option>
+            <option>IT / Technik</option>
+            <option>Andere Branche</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Was soll Ihre Website leisten?</label>
+          <textarea id="nachricht" placeholder="Kurze Beschreibung: Haben Sie schon eine Website? Was soll besser werden? Was ist Ihr Ziel?"></textarea>
+        </div>
+        <button type="button" class="btn btn-v" style="width:100%;justify-content:center" id="sbtn" onclick="sendForm()">
+          <span>Kostenloses Erstgespräch anfragen →</span>
+        </button>
+        <div class="fpri">Mit dem Absenden stimmen Sie unserer <a href="legal/datenschutz.html">Datenschutzerklärung</a> zu. Ihre Daten werden verschlüsselt übertragen und nicht an Dritte weitergegeben.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CTA BANNER ═══════ -->
+<section id="ctab">
+  <div class="ct ctab-in">
+    <div data-r>
+      <div class="ey" style="justify-content:center;margin-bottom:20px">Bereit loszulegen?</div>
+      <h2 class="ctab-t">Ihr Unternehmen verdient<br>eine Website, die <span>funktioniert.</span></h2>
+      <p class="ctab-s">Kostenloser Erstkontakt, verbindlicher Festpreis, messbare Ergebnisse. Lassen Sie uns reden.</p>
+      <div class="ctab-acts">
+        <a href="#contact" class="btn btn-v"><span>Jetzt Projekt starten →</span></a>
+        <a href="tel:+490001234567" class="btn btn-ghost">📞 Direkt anrufen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="ct">
+    <div class="fg-grid">
+      <div>
+        <div class="fbrand-logo">
+          <img class="fbmark" src="assets/images/logo.png" alt="KN-Studio Logo" >
+          <div class="fbname">KN-Studio</div>
+        </div>
+        <div class="fbdesc">Ihr IT-Partner für Webdesign, das Kunden gewinnt – für jede Branche, jeden Maßstab, überall in Deutschland.</div>
+        <div class="fsocc">
+          <a href="#" class="fsoc" title="Instagram">ig</a>
+          <a href="#" class="fsoc" title="LinkedIn">in</a>
+          <a href="#" class="fsoc" title="Google">G</a>
+        </div>
+      </div>
+      <div>
+        <div class="fcol-t">Leistungen</div>
+        <div class="fcol-l">
+          <a href="#services">Webdesign</a>
+          <a href="#services">SEO & Sichtbarkeit</a>
+          <a href="#services">Online-Terminbuchung</a>
+          <a href="#services">Branding & Design</a>
+          <a href="#services">Wartung & Support</a>
+        </div>
+      </div>
+      <div>
+        <div class="fcol-t">Unternehmen</div>
+        <div class="fcol-l">
+          <a href="#mission">Über uns</a>
+          <a href="#portfolio">Projekte</a>
+          <a href="#testi">Bewertungen</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Kontakt</a>
+        </div>
+      </div>
+      <div>
+        <div class="fcol-t">Rechtliches</div>
+        <div class="fcol-l">
+          <a href="legal/impressum.html" id="impressum">Impressum</a>
+          <a href="legal/datenschutz.html" id="datenschutz">Datenschutz</a>
+          <a href="legal/agb.html">AGB</a>
+          <a href="#contact">Kontakt</a>
+        </div>
+      </div>
+    </div>
+    <div class="fbot">
+      <div class="fbot-c">© 2026 KN-Studio. Alle Rechte vorbehalten.</div>
+      <div class="fbot-ll">
+        <a href="legal/impressum.html">Impressum</a>
+        <a href="legal/datenschutz.html">Datenschutz</a>
+        <a href="legal/agb.html">AGB</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp -->
+<a id="wa" href="https://wa.me/49IHREWANUMMER?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Website." target="_blank" rel="noopener" title="WhatsApp – KN-Studio" aria-label="WhatsApp Kontakt">
+  <div class="wa-ring"></div>
+  💬
+</a>
+
+<script src="js/script.js"></script>
+</body>
+</html>
